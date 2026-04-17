@@ -63,13 +63,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <span className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter leading-none">WRITER</span>
               <div className="flex flex-col mt-1">
                 <span className="text-[10px] md:text-[11px] font-black text-[#E31E24] tracking-[0.4em] uppercase leading-none">Relocations</span>
-                <span className="text-[9px] md:text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase mt-1">United Arab Emirates</span>
+                <span className="text-[9px] md:text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase mt-1">State of Qatar</span>
               </div>
             </>
           ) : (
             <div className="flex flex-col items-center">
               <span className="text-2xl font-black text-slate-900 leading-none">W</span>
-              <span className="text-[8px] font-black text-[#E31E24] uppercase mt-0.5">UAE</span>
+              <span className="text-[8px] font-black text-[#E31E24] uppercase mt-0.5">State of Qatar</span>
             </div>
           )}
         </div>

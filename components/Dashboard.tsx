@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { getUAEToday } from '../utils';
+import { getQatarToday } from '../utils';
 import { Job, JobStatus, SystemSettings, JobCostSheet } from '../types';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { Package, Clock, AlertCircle, TrendingUp, BarChart3, ArrowUpRight, Download, Loader2, Activity, Calendar, X, Filter, CalendarRange, ListFilter, Camera, DollarSign, FileText } from 'lucide-react';
@@ -20,9 +20,10 @@ interface DashboardProps {
   settings: SystemSettings;
   onSetLimit: (date: string, limit: number) => void;
   isAdmin: boolean;
+  logo?: string;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ jobs, settings, isAdmin }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ jobs, settings, isAdmin, logo }) => {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [showDownloadOptions, setShowDownloadOptions] = useState(false);
   const [isScreenshotting, setIsScreenshotting] = useState(false);
@@ -30,15 +31,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ jobs, settings, isAdmin })
   // Summary Modal State
   const [showSummary, setShowSummary] = useState(false);
   const [summaryFilterType, setSummaryFilterType] = useState<'day' | 'range' | 'month'>('day');
-  const [summaryDate, setSummaryDate] = useState(getUAEToday());
-  const [summaryStartDate, setSummaryStartDate] = useState(getUAEToday());
-  const [summaryEndDate, setSummaryEndDate] = useState(getUAEToday());
-  const [summaryMonth, setSummaryMonth] = useState(getUAEToday().slice(0, 7));
+  const [summaryDate, setSummaryDate] = useState(getQatarToday());
+  const [summaryStartDate, setSummaryStartDate] = useState(getQatarToday());
+  const [summaryEndDate, setSummaryEndDate] = useState(getQatarToday());
+  const [summaryMonth, setSummaryMonth] = useState(getQatarToday().slice(0, 7));
   
   // Ref for the summary content to screenshot
   const summaryRef = useRef<HTMLDivElement>(null);
 
-  const today = getUAEToday();
+  const today = getQatarToday();
   const currentLimit = settings.daily_job_limits[today] || 10;
   // Filter out non-schedule activities from the capacity count as per user request
   const currentJobsCount = jobs.filter(j => 
@@ -184,11 +185,29 @@ export const Dashboard: React.FC<DashboardProps> = ({ jobs, settings, isAdmin })
 
       // Define header and footer for each page
       const pageContent = (data: any) => {
-        // Header
-        doc.setFontSize(20);
+        // Header with Logo
+        if (logo) {
+            try {
+                const imgProps = doc.getImageProperties(logo);
+                const ratio = imgProps.width / imgProps.height;
+                const maxLogoW = 35;
+                const maxLogoH = 15;
+                let renderW = maxLogoW;
+                let renderH = renderW / ratio;
+                if (renderH > maxLogoH) {
+                    renderH = maxLogoH;
+                    renderW = renderH * ratio;
+                }
+                doc.addImage(logo, 'PNG', data.settings.margin.left, 10, renderW, renderH);
+            } catch (e) {
+                console.warn("Logo rendering failed in PDF", e);
+            }
+        }
+
+        doc.setFontSize(16);
         doc.setTextColor(40);
         doc.setFont('helvetica', 'bold');
-        doc.text('WRITER Relocations - Operations Report', data.settings.margin.left, 22);
+        doc.text('Operations Report', data.settings.margin.left + (logo ? 40 : 0), 22);
         
         // Footer
         const pageCount = doc.getNumberOfPages ? doc.getNumberOfPages() : (doc.internal.pages.length - 1);
@@ -542,7 +561,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ jobs, settings, isAdmin })
                 <Tooltip 
                     cursor={{fill: '#f8fafc'}} 
                     contentStyle={{borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'}}
-                    formatter={(value: number) => [`AED ${value.toFixed(2)}`, 'Cost']}
+                    formatter={(value: number) => [`QAR ${value.toFixed(2)}`, 'Cost']}
                 />
                 <Bar dataKey="v" radius={[8, 8, 0, 0]} fill="#3b82f6" fillOpacity={0.8} />
               </BarChart>

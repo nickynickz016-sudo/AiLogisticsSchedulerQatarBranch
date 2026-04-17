@@ -16,7 +16,7 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ jobs }) => {
     setLoading(true);
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const prompt = `Act as a UAE-based logistics fleet manager. Analyze this daily job allocation list for Dubai/Abu Dhabi regions. 
+      const prompt = `Act as a Qatar-based logistics fleet manager. Analyze this daily job allocation list for Doha/Al Wakrah regions. 
       Factors to consider: 
       - CBM Volume for truck sizing.
       - Loading Type (e.g., Warehouse Removal vs Storage).
@@ -29,7 +29,7 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ jobs }) => {
       1. A prioritized route sequence.
       2. Vehicle recommendation (3-ton, 5-ton, or 10-ton) based on CBM.
       3. Manpower efficiency suggestions.
-      Keep it professional and focused on UAE logistics optimization.`;
+      Keep it professional and focused on Qatar logistics optimization.`;
 
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
@@ -54,7 +54,7 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ jobs }) => {
               <BrainCircuit className="w-5 h-5 text-blue-400" />
               <span className="font-bold text-[10px] uppercase tracking-widest text-blue-300">Logistic AI Engine</span>
             </div>
-            <h2 className="text-4xl font-black mb-6 leading-tight">Sync your fleet<br/><span className="text-blue-400">with UAE smart logic.</span></h2>
+            <h2 className="text-4xl font-black mb-6 leading-tight">Sync your fleet<br/><span className="text-blue-400">with Qatar smart logic.</span></h2>
             <p className="text-slate-400 text-lg leading-relaxed mb-8 max-w-lg font-medium">
               Analyze CBM volumes, region proximity, and crew requirements instantly to reduce empty-mile transit and maximize daily throughput.
             </p>
@@ -64,7 +64,7 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ jobs }) => {
               className="flex items-center gap-4 bg-blue-600 text-white px-10 py-5 rounded-[1.25rem] font-black text-lg hover:bg-blue-700 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 shadow-xl shadow-blue-900/40"
             >
               {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : <Play className="w-6 h-6 fill-current" />}
-              {loading ? 'CALCULATING ROUTES...' : 'OPTIMIZE UAE FLEET'}
+              {loading ? 'CALCULATING ROUTES...' : 'OPTIMIZE QATAR FLEET'}
             </button>
           </div>
           

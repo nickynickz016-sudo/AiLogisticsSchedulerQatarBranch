@@ -61,7 +61,7 @@ export const Inventory: React.FC<InventoryProps> = ({ jobs = [], users = [], log
   const [newVendorName, setNewVendorName] = useState('');
 
   const outsourceTypes = ['Packer', 'Helpers', 'Handyman', 'Overtime', 'Machine (forklift)', 'Truck (3 ton)', 'Truck (5 ton)', 'Truck (10 ton)'];
-  const locations = ['Sharjah', 'Abu Dhabi', 'Dubai', 'Ras Al Khaimah', 'Fujairah'];
+  const locations = ['Doha', 'Al Wakrah', 'Al Rayyan', 'Al Khor', 'Lusail'];
 
   // Purchase State
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
@@ -545,7 +545,7 @@ export const Inventory: React.FC<InventoryProps> = ({ jobs = [], users = [], log
                     'Vendor': item.vendor_name || '-',
                     'Rate': item.price, // This is the updated rate from the master list
                     [`Consumed from (${reportStartDate} to ${reportEndDate})`]: totalConsumedInRange,
-                    'Rate x Consumed qty (AED Price)': (totalConsumedInRange * item.price).toFixed(2)
+                    'Rate x Consumed qty (QAR Price)': (totalConsumedInRange * item.price).toFixed(2)
                 };
             })
             .filter(row => row !== null);
@@ -1275,7 +1275,7 @@ export const Inventory: React.FC<InventoryProps> = ({ jobs = [], users = [], log
             6: { cellWidth: 30, halign: 'right' }, // Rate
             7: { cellWidth: 40, halign: 'right', fontStyle: 'bold', textColor: [5, 150, 105] } // Total
         },
-        foot: [['', '', '', '', '', '', 'GRAND TOTAL', calculateTotalCost().toFixed(2) + ' AED']],
+        foot: [['', '', '', '', '', '', 'GRAND TOTAL', calculateTotalCost().toFixed(2) + ' QAR']],
         footStyles: {
             fillColor: [30, 41, 59],
             textColor: [255, 255, 255],
@@ -1361,7 +1361,7 @@ export const Inventory: React.FC<InventoryProps> = ({ jobs = [], users = [], log
 
     (doc as any).autoTable({
         startY: yPos,
-        head: [['SR#', 'Code', 'Description', 'Unit', 'Stock', 'Min. Level', 'Price (AED)']],
+        head: [['SR#', 'Code', 'Description', 'Unit', 'Stock', 'Min. Level', 'Price (QAR)']],
         body: tableBody,
         margin: { left: margin, right: margin },
         headStyles: { 
@@ -1703,7 +1703,7 @@ export const Inventory: React.FC<InventoryProps> = ({ jobs = [], users = [], log
                             />
                         ) : (
                             <div className="flex flex-col items-end gap-1">
-                               <span className="font-bold text-slate-700">AED {item.price.toFixed(2)}</span>
+                               <span className="font-bold text-slate-700">QAR {item.price.toFixed(2)}</span>
                                {!isReadOnly && (
                                    <button 
                                        onClick={() => {
@@ -1888,7 +1888,7 @@ export const Inventory: React.FC<InventoryProps> = ({ jobs = [], users = [], log
                                             <th className="p-4 text-center w-32 bg-blue-50/50 text-blue-700">Issued Qty</th>
                                             <th className="p-4 text-center w-32 bg-orange-50/50 text-orange-700">Returned Qty</th>
                                             <th className="p-4 text-center w-24 bg-slate-100 text-slate-700">Consumed</th>
-                                            {costingStage === 'Final' && <th className="p-4 text-right w-32 bg-emerald-50/50 text-emerald-700">Cost (AED)</th>}
+                                            {costingStage === 'Final' && <th className="p-4 text-right w-32 bg-emerald-50/50 text-emerald-700">Cost (QAR)</th>}
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100">
@@ -1956,7 +1956,7 @@ export const Inventory: React.FC<InventoryProps> = ({ jobs = [], users = [], log
                                         <tfoot>
                                             <tr className="bg-slate-900 text-white">
                                                 <td colSpan={5} className="p-4 text-right text-xs font-bold uppercase tracking-widest">Total Material Cost</td>
-                                                <td className="p-4 text-right text-lg font-black">{calculateTotalCost().toFixed(2)} AED</td>
+                                                <td className="p-4 text-right text-lg font-black">{calculateTotalCost().toFixed(2)} QAR</td>
                                             </tr>
                                         </tfoot>
                                     )}
@@ -2234,7 +2234,7 @@ export const Inventory: React.FC<InventoryProps> = ({ jobs = [], users = [], log
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Price</label>
                     <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">AED</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">QAR</span>
                         <input 
                             type="number" 
                             step="0.01"
@@ -2254,7 +2254,7 @@ export const Inventory: React.FC<InventoryProps> = ({ jobs = [], users = [], log
                         className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:ring-1 focus:ring-blue-500 outline-none" 
                         value={newItem.description} 
                         onChange={e => setNewItem({...newItem, description: e.target.value})} 
-                        placeholder="e.g. 3 Ton Truck - Dubai - Full Day" 
+                        placeholder="e.g. 3 Ton Truck - Doha - Full Day" 
                     />
                   </div>
                 </div>
@@ -2306,7 +2306,7 @@ export const Inventory: React.FC<InventoryProps> = ({ jobs = [], users = [], log
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Price</label>
                         <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">AED</span>
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">QAR</span>
                             <input 
                                 type="number" 
                                 step="0.01"
@@ -2372,7 +2372,7 @@ export const Inventory: React.FC<InventoryProps> = ({ jobs = [], users = [], log
             
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">New Rate (AED)</label>
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">New Rate (QAR)</label>
                 <input
                   type="number"
                   value={newPrice}
@@ -2396,7 +2396,7 @@ export const Inventory: React.FC<InventoryProps> = ({ jobs = [], users = [], log
                 <div className="max-h-40 overflow-y-auto space-y-2 pr-2">
                     {priceHistory[showPriceModal]?.map((ph, idx) => (
                         <div key={ph.id} className="flex justify-between items-center p-2 bg-slate-50 rounded-lg border border-slate-100">
-                            <span className="text-xs font-bold text-slate-700">AED {ph.price.toFixed(2)}</span>
+                            <span className="text-xs font-bold text-slate-700">QAR {ph.price.toFixed(2)}</span>
                             <span className="text-[10px] text-slate-500">{ph.effective_date}</span>
                         </div>
                     )) || <p className="text-xs text-slate-400 italic">No history found</p>}

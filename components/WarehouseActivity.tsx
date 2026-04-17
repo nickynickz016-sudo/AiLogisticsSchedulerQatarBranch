@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { getUAEToday } from '../utils';
+import { getQatarToday } from '../utils';
 import { Job, JobStatus, UserProfile, Personnel, Vehicle, UserRole } from '../types';
 import { Plus, X, Box, User, Clock, AlertCircle, Info, Calendar, RefreshCw, ChevronLeft, ChevronRight, Activity, LayoutList, CalendarDays, Edit2, Truck, Users, ArrowRight, FileDown } from 'lucide-react';
 import jsPDF from 'jspdf';
@@ -17,8 +17,8 @@ interface WarehouseActivityProps {
   users?: UserProfile[];
 }
 
-// Helper to get UAE date string YYYY-MM-DD
-const getLocalToday = () => getUAEToday();
+// Helper to get Qatar date string YYYY-MM-DD
+const getLocalToday = () => getQatarToday();
 
 export const WarehouseActivity: React.FC<WarehouseActivityProps> = ({ 
   jobs, 

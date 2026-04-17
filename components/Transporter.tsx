@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Job, JobStatus, UserProfile, Personnel, Vehicle } from '../types';
 import { Plus, X, Bus, User, MapPin, Navigation, Trash2, Edit2, CheckCircle2, AlertCircle, ArrowRight, Users, Settings, Camera, Loader2, RefreshCw } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
-import { getUAEToday } from '../utils';
+import { getQatarToday } from '../utils';
 import html2canvas from 'html2canvas';
 
 interface TransporterProps {
@@ -27,7 +27,7 @@ export const Transporter: React.FC<TransporterProps> = ({
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [originalId, setOriginalId] = useState<string | null>(null);
-  const [selectedDate, setSelectedDate] = useState(getUAEToday());
+  const [selectedDate, setSelectedDate] = useState(getQatarToday());
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [isScreenshotting, setIsScreenshotting] = useState(false);
   const componentRef = useRef<HTMLDivElement>(null);

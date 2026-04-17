@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { getUAEToday } from './utils';
+import { getQatarToday } from './utils';
 import { Sidebar } from './components/Sidebar';
 import { Dashboard } from './components/Dashboard';
 import { ScheduleView } from './components/ScheduleView';
@@ -41,16 +41,6 @@ const App: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // New state for mobile
   const [showHolidayAlert, setShowHolidayAlert] = useState(false);
   const [showSystemAlert, setShowSystemAlert] = useState(false);
-  const [isDisconnected, setIsDisconnected] = useState(false);
-
-  // Check for database connection
-  useEffect(() => {
-    const url = import.meta.env.VITE_SUPABASE_URL;
-    const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    if (!url || !key) {
-      setIsDisconnected(true);
-    }
-  }, []);
 
   // Notification State
   const [notifications, setNotifications] = useState<{id: string, text: string, time: string, read: boolean, type: 'success'|'error'|'info'|'warning'}[]>([]);
@@ -109,8 +99,6 @@ const App: React.FC = () => {
 
   const fetchSettings = useCallback(async (retryCount = 0) => {
     try {
-        // Use select('*') to gracefully handle missing columns in legacy schemas
-        // This prevents the app from crashing if 'system_alert' or other new columns don't exist yet
         const { data, error } = await supabase.from('system_settings').select('*').eq('id', 1).single();
         
         if (data) {
@@ -118,17 +106,14 @@ const App: React.FC = () => {
             daily_job_limits: data.daily_job_limits || {},
             holidays: data.holidays || [],
             company_logo: data.company_logo || undefined,
-            // Fallback for system_alert if column is missing
             system_alert: data.system_alert || { active: false, title: '', message: '', type: 'info' }
           });
           
-          // Trigger alert if active and valid
           if (data.system_alert && data.system_alert.active) {
             setShowSystemAlert(true);
           }
         } else if (error) {
           // Only attempt to create if the row genuinely doesn't exist (PGRST116)
-          // This prevents "duplicate key value" errors if the fetch failed for other reasons (e.g. column missing)
           if (error.code === 'PGRST116') {
              console.log('Settings not found, creating default...');
              const { error: insertError } = await supabase.from('system_settings').insert([{ id: 1, daily_job_limits: {}, holidays: [] as string[] }]);
@@ -136,18 +121,15 @@ const App: React.FC = () => {
              else if (retryCount < 3) {
                  setTimeout(() => fetchSettings(retryCount + 1), 1000);
              }
-          } else {
-             throw error; // Throw error to trigger retry logic
+          } else if (error.code !== 'PGRST116') {
+             // Log but don't throw for non-critical setting fetch errors
+             console.warn('Settings fetch notice:', error.message);
           }
         }
     } catch (err) {
-        console.error('Unexpected error fetching settings (attempt ' + (retryCount + 1) + '):', err);
-        // Retry logic for transient network errors
-        if (retryCount < 3) {
-            setTimeout(() => fetchSettings(retryCount + 1), 2000);
-        }
+        console.error('Unexpected error fetching settings:', err);
     }
-  }, []);
+  }, [currentUser]);
 
   // Fetch settings on initial load to ensure Logo is available for Login Screen
   useEffect(() => {
@@ -418,7 +400,7 @@ const App: React.FC = () => {
         const duration = job.duration || 1;
         
         // Calculate the required dates based on the new duration
-        let currentDateObj = new Date(baseJob.job_date || getUAEToday());
+        let currentDateObj = new Date(baseJob.job_date || getQatarToday());
         let daysScheduled = 0;
         const requiredDates: string[] = [];
         
@@ -505,7 +487,7 @@ const App: React.FC = () => {
     // However, job.job_date usually comes from inputs which are YYYY-MM-DD.
     let baseDate = job.job_date;
     if (!baseDate) {
-        baseDate = getUAEToday();
+        baseDate = getQatarToday();
     }
 
     const duration = job.duration || 1;
@@ -916,23 +898,7 @@ const App: React.FC = () => {
 
   if (!currentUser) {
     return (
-      <>
-        <LoginScreen onLogin={handleLogin} users={allCredentials} logo={settings.company_logo} />
-        {isDisconnected && (
-          <div className="fixed bottom-4 right-4 z-50 max-w-md bg-amber-50 border border-amber-200 rounded-lg p-4 shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-              <div>
-                <h3 className="text-sm font-semibold text-amber-900">Database Disconnected</h3>
-                <p className="text-xs text-amber-700 mt-1">
-                  This software is currently disconnected from the original database. 
-                  To use your own database, please provide your Supabase credentials in the <strong>Settings</strong> menu.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-      </>
+      <LoginScreen onLogin={handleLogin} users={allCredentials} logo={settings.company_logo} />
     );
   }
 
@@ -1075,7 +1041,7 @@ const App: React.FC = () => {
 
         <main className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto custom-scrollbar w-full">
           <div className="max-w-[1600px] mx-auto pb-12">
-            {activeTab === 'dashboard' && <Dashboard jobs={jobs} settings={settings} onSetLimit={handleSetLimit} isAdmin={currentUser.role === UserRole.ADMIN} />}
+            {activeTab === 'dashboard' && <Dashboard jobs={jobs} settings={settings} onSetLimit={handleSetLimit} isAdmin={currentUser.role === UserRole.ADMIN} logo={settings.company_logo} />}
             {activeTab === 'schedule' && (
               <ScheduleView 
                 jobs={jobs} 

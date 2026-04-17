@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { getUAEToday } from '../utils';
+import { getQatarToday } from '../utils';
 import { Job, JobStatus, UserProfile, CustomsStatus, UserRole } from '../types';
 import { Plus, X, FileCheck, User, Clock, AlertCircle, Info, ShieldCheck, Edit3, Calendar, RefreshCw, ChevronLeft, ChevronRight, History } from 'lucide-react';
 
@@ -12,8 +12,8 @@ interface ImportClearanceProps {
   onUpdateCustomsStatus: (jobId: string, status: CustomsStatus) => void;
 }
 
-// Helper to get UAE date string YYYY-MM-DD
-const getLocalToday = () => getUAEToday();
+// Helper to get Qatar date string YYYY-MM-DD
+const getLocalToday = () => getQatarToday();
 
 export const ImportClearance: React.FC<ImportClearanceProps> = ({ jobs, onAddJob, onDeleteJob, currentUser, onUpdateCustomsStatus }) => {
   const [showModal, setShowModal] = useState(false);

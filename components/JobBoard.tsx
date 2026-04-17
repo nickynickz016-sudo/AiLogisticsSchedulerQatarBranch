@@ -210,7 +210,7 @@ export const JobBoard: React.FC<JobBoardProps> = ({ jobs, onAddJob, onDeleteJob,
                       required 
                       type="text" 
                       className={`w-full px-5 py-3.5 bg-slate-50 border ${newJob.id && jobs.some(j => j.id === newJob.id || j.id.startsWith(`${newJob.id}-D`)) ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200'} rounded-xl text-sm font-bold focus:ring-1 focus:ring-blue-500 outline-none placeholder:text-slate-400`} 
-                      placeholder="e.g., AE-1234" 
+                      placeholder="e.g., QA-1234" 
                       value={newJob.id} 
                       onChange={e => setNewJob({...newJob, id: e.target.value})} 
                     />

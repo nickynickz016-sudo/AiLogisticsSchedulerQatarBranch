@@ -216,7 +216,7 @@ export const WalkThroughDisclaimer: React.FC = () => {
                    value={formData.jobId}
                    onChange={e => setFormData({...formData, jobId: e.target.value})}
                    className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-xl text-sm font-bold focus:ring-1 focus:ring-blue-500 outline-none"
-                   placeholder="e.g. AE-10234"
+                   placeholder="e.g. QA-10234"
                  />
               </div>
               <div className="space-y-1.5">
@@ -226,7 +226,7 @@ export const WalkThroughDisclaimer: React.FC = () => {
                    value={formData.address}
                    onChange={e => setFormData({...formData, address: e.target.value})}
                    className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-xl text-sm font-bold focus:ring-1 focus:ring-blue-500 outline-none"
-                   placeholder="Villa 12, Springs 4, Dubai"
+                   placeholder="Villa 12, Pearl, Doha"
                  />
               </div>
               <div className="space-y-1.5">

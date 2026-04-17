@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { getUAEToday } from '../utils';
+import { getQatarToday } from '../utils';
 import { Job, JobStatus, LoadingType, UserProfile, Personnel, Vehicle, UserRole, ShipmentDetailsType } from '../types';
 import { Plus, Search, Package, Clock, User, X, Calendar as CalendarIcon, CheckCircle2, Truck, Settings2, Lock, Unlock, Trash2, Users, ChevronLeft, ChevronRight, Maximize, Minimize, Phone, Mail, Briefcase, FileText, AlertCircle, MapPin, RefreshCw, Edit2, Maximize2, Minimize2, Copy, Download } from 'lucide-react';
 import { JobDetailModal } from './JobDetailModal';
@@ -31,18 +31,18 @@ const LOADING_TYPES: LoadingType[] = ['Warehouse Removal', 'Direct Loading', 'St
 
 // Updated country codes with validation rules
 const countryCodes = [
+  { name: 'Qatar', code: '+974', digits: 8 },
   { name: 'UAE', code: '+971', digits: 9 },
   { name: 'USA', code: '+1', digits: 10 },
   { name: 'UK', code: '+44', digits: 10 },
   { name: 'India', code: '+91', digits: 10 },
   { name: 'KSA', code: '+966', digits: 9 },
-  { name: 'Qatar', code: '+974', digits: 8 },
 ];
 
-// Helper to get UAE date string YYYY-MM-DD
+// Helper to get Qatar date string YYYY-MM-DD
 const getLocalDateString = (date: Date = new Date()) => {
   return new Intl.DateTimeFormat('en-CA', { 
-    timeZone: 'Asia/Dubai', 
+    timeZone: 'Asia/Qatar', 
     year: 'numeric', 
     month: '2-digit', 
     day: '2-digit' 
@@ -59,8 +59,8 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
   const [filter, setFilter] = useState('');
   const [viewMode, setViewMode] = useState<'calendar' | 'list' | 'month'>('list');
   const [currentDate, setCurrentDate] = useState(() => {
-    const uaeStr = getUAEToday();
-    const [y, m, d] = uaeStr.split('-').map(Number);
+    const qatarStr = getQatarToday();
+    const [y, m, d] = qatarStr.split('-').map(Number);
     return new Date(y, m - 1, d);
   });
   
@@ -85,9 +85,9 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
   const today = getLocalDateString();
   
   const initialNewJobState: Partial<Job> = {
-    id: 'AE-', 
+    id: 'QA-', 
     shipper_name: '',
-    shipper_phone: '+971 ',
+    shipper_phone: '+974 ',
     client_email: '',
     location: '',
     shipment_details: 'Local Move',
@@ -112,12 +112,12 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
 
   const [newJob, setNewJob] = useState<Partial<Job>>(initialNewJobState);
   const [showCopyModal, setShowCopyModal] = useState<Job | null>(null);
-  const [copyDate, setCopyDate] = useState(getUAEToday());
+  const [copyDate, setCopyDate] = useState(getQatarToday());
   
   // Export State
   const [showExportModal, setShowExportModal] = useState(false);
-  const [exportStartDate, setExportStartDate] = useState(getUAEToday());
-  const [exportEndDate, setExportEndDate] = useState(getUAEToday());
+  const [exportStartDate, setExportStartDate] = useState(getQatarToday());
+  const [exportEndDate, setExportEndDate] = useState(getQatarToday());
 
   const handleExportExcel = () => {
     // Filter jobs by date range
@@ -218,7 +218,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
   const generateUniqueId = () => {
     const random = Math.floor(1000 + Math.random() * 9000);
     const suffix = new Date().getFullYear().toString().slice(-2);
-    setNewJob(prev => ({ ...prev, id: `AE-${random}-${suffix}` }));
+    setNewJob(prev => ({ ...prev, id: `QA-${random}-${suffix}` }));
   };
 
   const getJobDayLabel = (job: Job) => {
@@ -257,7 +257,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
     // Detailed Validation Logic
     const missingFields: string[] = [];
 
-    if (!newJob.id || newJob.id.trim() === 'AE-') missingFields.push("Job No.");
+    if (!newJob.id || newJob.id.trim() === 'QA-') missingFields.push("Job No.");
     if (!newJob.shipper_name || !newJob.shipper_name.trim()) missingFields.push("Shipper Name");
     if (!newJob.job_date) missingFields.push("Start Date");
     if (!newJob.location || !newJob.location.trim()) missingFields.push("Location Address");
@@ -430,7 +430,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
         setViewMode('list');
     };
 
-    const localTodayStr = getUAEToday();
+    const localTodayStr = getQatarToday();
 
     return (
       <div className="flex flex-col">
@@ -1154,7 +1154,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                             className={`w-full px-5 py-3.5 pr-12 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:ring-1 focus:ring-blue-500 outline-none`}
                             value={newJob.id} 
                             onChange={e => setNewJob({...newJob, id: e.target.value})} 
-                            placeholder="AE-XXXX" 
+                            placeholder="QA-XXXX" 
                         />
                         <button 
                             type="button" 
@@ -1212,7 +1212,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                     <div className="flex">
                       <select 
                         className="w-1/3 px-3 py-3.5 bg-slate-50 border border-r-0 border-slate-200 rounded-l-xl text-xs font-bold focus:ring-1 focus:ring-blue-500 outline-none appearance-none"
-                        value={newJob.shipper_phone?.split(' ')[0] || '+971'}
+                        value={newJob.shipper_phone?.split(' ')[0] || '+974'}
                         onChange={e => {
                           const numberPart = newJob.shipper_phone?.split(' ')[1] || '';
                           setNewJob({ ...newJob, shipper_phone: `${e.target.value} ${numberPart}` });
@@ -1225,11 +1225,11 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                         className="w-2/3 px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-r-xl text-sm font-bold focus:ring-1 focus:ring-blue-500 outline-none" 
                         value={newJob.shipper_phone?.split(' ')[1] || ''}
                         onChange={e => {
-                          const prefixPart = newJob.shipper_phone?.split(' ')[0] || '+971';
+                          const prefixPart = newJob.shipper_phone?.split(' ')[0] || '+974';
                           const val = e.target.value.replace(/\D/g, '');
                           setNewJob({ ...newJob, shipper_phone: `${prefixPart} ${val}` });
                         }}
-                        placeholder={`Req: ${countryCodes.find(c => c.code === (newJob.shipper_phone?.split(' ')[0] || '+971'))?.digits} digits`}
+                        placeholder={`Req: ${countryCodes.find(c => c.code === (newJob.shipper_phone?.split(' ')[0] || '+974'))?.digits} digits`}
                       />
                     </div>
                   </div>
@@ -1246,7 +1246,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({
                       value={newJob.location} 
                       onChange={(e) => setNewJob({ ...newJob, location: e.target.value })}
                       autoComplete="off"
-                      placeholder="e.g. Villa 12, Springs 4, Dubai"
+                      placeholder="e.g. Villa 12, Pearl, Doha"
                     />
                   </div>
                 </div>
